@@ -1,0 +1,14 @@
+Sample meeting - January 1, 2030
+January 1, 2030 9:00:00 AM
+2m 30s
+
+Speaker 1 | 00:00
+Good morning, support desk, how can I help?
+Alex Rivera | 00:05
+Hi, this is Alex from Example Suites. Our lobby kiosk is offline and I cannot get it back up. Ticket is T20990101.0001.
+Speaker 1 | 00:30
+Okay, I remoted in and restarted the kiosk service. Screen is back up now.
+Alex Rivera | 00:45
+Yes it's working now. You can reach me at 555-010-0199 if anything comes up.
+Speaker 1 | 00:55
+Great, I'll close the ticket out. Have a good one.
