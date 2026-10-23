@@ -2,7 +2,7 @@
 
 Turn noisy support-call transcripts into clean deliverables: **internal notes, ticket drafts, and follow-up emails** — with PII redaction built in.
 
-Born from real help-desk work: voice-to-text transcripts are messy (garbled names, phonetic spellings, interruptions), and turning them into ticket notes by hand eats 5–10 minutes per call. This tool does the boring part.
+Support-call documentation is repetitive: voice-to-text transcripts can contain garbled names, phonetic spellings, and interruptions, while turning them into ticket notes by hand takes time. This tool streamlines the drafting workflow.
 
 ## Features
 
@@ -45,13 +45,13 @@ Input (synthetic):
 Speaker 1 | 00:00
 Good morning, support desk.
 Alex Rivera | 00:05
-Hi, this is Alex calling about ticket T20990101.0001...
+Hi, this is Alex calling about ticket TICKET-20300101-0001...
 ```
 
 Output (internal note):
 
 ```
-**Internal Note — T20990101.0001**
+**Internal Note — TICKET-20300101-0001**
 
 Call with [confirm contact name].
 
@@ -59,7 +59,7 @@ Customer confirmed issue resolved on the call — ticket can be closed.
 
 **Direct line(s) captured:** 555-010-0199
 
-Tife Alli, Centrada Solutions
+Support Agent, Support Team
 ```
 
 ## Design rules

@@ -63,7 +63,7 @@ def test_internal_note_marks_resolution():
     note = internal_note(t, extract(t), DraftContext())
     assert "T20990101.0001" in note
     assert "resolved" in note
-    assert note.rstrip().endswith("Centrada Solutions")
+    assert note.rstrip().endswith("Support Team")
 
 
 def test_redact_strips_pii():

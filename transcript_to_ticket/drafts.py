@@ -15,8 +15,8 @@ from .parser import Transcript
 
 @dataclass
 class DraftContext:
-    agent_name: str = "Tife Alli"
-    agent_org: str = "Centrada Solutions"
+    agent_name: str = "Support Agent"
+    agent_org: str = "Support Team"
     property_name: str = "[confirm property name]"
     contact_name: str = "[confirm contact name]"
 
@@ -59,7 +59,7 @@ def ticket_draft(t: Transcript, f: Facts, ctx: DraftContext) -> str:
             "",
             f"**Account:** {_flagged(ctx.property_name)}",
             f"**Contact:** {_flagged(ctx.contact_name)}",
-            "**Issue Type:** [set from Autotask]",
+            "**Issue Type:** [set from your ticketing system]",
             "**Priority:** [1-High if urgent / 3-Medium default]",
             "**Source:** Phone",
             "",
