@@ -6,15 +6,18 @@ import re
 from dataclasses import dataclass, field
 
 from .parser import Transcript
+from .patterns import EMAIL, PHONE, TICKET
 
-_TICKET = re.compile(r"\bT\d{8}\.\d{4}\b")
-_EMAIL = re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.]+\b")
-_PHONE = re.compile(r"\b(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b")
 # "T is Tom, H is Harry, Y" style phonetic spellings; a token is a bare letter
 # optionally followed by "is/as in <word>"
-_TOKEN = re.compile(r"\b([A-Za-z])\b(?:\s+(?:is|as in)\s+\w+)?")
+_LETTER_TOKEN = (
+    r"\b([A-Za-z])\b"
+    r"(?:[ \t]+(?:is(?:[ \t]+as[ \t]+in)?|as[ \t]+in)[ \t]+\w+)?"
+)
+_TOKEN = re.compile(_LETTER_TOKEN, re.IGNORECASE)
 # a spelling run = 4+ consecutive letter tokens separated by commas/spaces
-_RUN = re.compile(r"((?:\b[A-Za-z]\b(?:\s+(?:is|as in)\s+\w+)?[,.]?\s+){4,}\b[A-Za-z]\b(?:\s+(?:is|as in)\s+\w+)?)")
+_SEPARATOR = r"(?:[ \t]*,[ \t]*|[ \t]*-[ \t]*|[ \t]+)"
+_RUN = re.compile(rf"{_LETTER_TOKEN}(?:{_SEPARATOR}{_LETTER_TOKEN}){{3,}}", re.IGNORECASE)
 
 
 @dataclass
@@ -33,8 +36,8 @@ class Facts:
 def _decode_phonetic(text: str) -> list[str]:
     """Turn "D is dog, O, R, O, T is Tom, H is Harry, Y" into DOROTHY."""
     out: list[str] = []
-    for run in _RUN.findall(text):
-        letters = _TOKEN.findall(run)
+    for run in _RUN.finditer(text):
+        letters = _TOKEN.findall(run.group())
         if len(letters) >= 4:
             out.append("".join(letters).upper())
     return out
@@ -43,10 +46,13 @@ def _decode_phonetic(text: str) -> list[str]:
 def extract(t: Transcript) -> Facts:
     body = t.full_text
     f = Facts()
-    f.ticket_numbers = list(dict.fromkeys(_TICKET.findall(body)))
-    f.emails = list(dict.fromkeys(_EMAIL.findall(body)))
-    f.phones = list(dict.fromkeys(_PHONE.findall(body)))
-    f.phonetic_spellings = _decode_phonetic(body)
+    f.ticket_numbers = list(dict.fromkeys(m.upper() for m in TICKET.findall(body)))
+    f.emails = list(dict.fromkeys(EMAIL.findall(body)))
+    f.phones = list(dict.fromkeys(PHONE.findall(body)))
+    # Do not accidentally combine letters spoken in separate turns.
+    f.phonetic_spellings = list(dict.fromkeys(
+        spelling for u in t.utterances for spelling in _decode_phonetic(u.text)
+    ))
     low = body.lower()
     f.mentions_escalation = any(
         k in low for k in ("escalat", "reassign", "supervisor")

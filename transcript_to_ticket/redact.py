@@ -9,10 +9,12 @@ from __future__ import annotations
 
 import re
 
+from .patterns import EMAIL, PHONE, TICKET
+
 _REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"\bT\d{8}\.\d{4}\b"), "[TICKET]"),
-    (re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.]+\b"), "[EMAIL]"),
-    (re.compile(r"\b(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b"), "[PHONE]"),
+    (TICKET, "[TICKET]"),
+    (EMAIL, "[EMAIL]"),
+    (PHONE, "[PHONE]"),
     (
         re.compile(
             r"\b\d{1,3}(?:\.\d{1,3}){3}\b"  # IPv4
